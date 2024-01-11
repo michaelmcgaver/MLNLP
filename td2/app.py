@@ -4,7 +4,10 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import sentiwordnet as swn
 from nltk.corpus import wordnet as wn
 
-# Definire una funzione che mappa i tag del part-of-speech di treebank ai tag di WordNet
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('sentiwordnet')
+
 def treebank_to_wn(tag):
     if tag.startswith('J'):
         return wn.ADJ
@@ -36,12 +39,10 @@ def eval_sentiment(review):
         swn_synset = swn.senti_synset(synsets[0].name())
         sentiment += swn_synset.pos_score() - swn_synset.neg_score()
         tokens_count += 1
-
-    return sentiment
+    return sentiment / tokens_count if tokens_count > 0 else 0
 
 st.title("Sentiment Analysis App")
 st.write("Enter the text you'd like to analyze for sentiment.")
-
 user_input = st.text_area("Text to analyze", "Type Here...")
 
 if st.button('Evaluate Sentiment'):
@@ -49,4 +50,4 @@ if st.button('Evaluate Sentiment'):
         result = eval_sentiment(user_input)
         st.write("The sentiment score of the input is:", result)
     else:
-        st.error("ERROR")
+        st.error("Error!")
