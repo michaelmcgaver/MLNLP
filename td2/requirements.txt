@@ -1,0 +1,5 @@
+# Streamlit
+streamlit==1.2.0
+
+# NLTK
+nltk==3.6.3
