@@ -1,30 +1,27 @@
 import streamlit as st
+from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
-from nltk.tag import UnigramTagger
-from nltk.corpus import treebank
-from nltk.corpus import wordnet as wn
-from nltk.corpus import sentiwordnet as swn
-from nltk.tag import pos_tag
-from nltk.stem import WordNetLemmatizer
 
-# Downloading necessary NLTK datasets
-nltk.download('averaged_perceptron_tagger')
-nltk.download('punkt')
+# Download VADER lexicon for sentiment analysis
+nltk.download('vader_lexicon')
 
-# Title and introduction
-st.title("NLP Analysis with NLTK")
-st.write("This application performs part-of-speech tagging and sentiment analysis on the text you enter.")
+# Initialize the Sentiment Intensity Analyzer
+sia = SentimentIntensityAnalyzer()
 
-# User input
-user_input = st.text_area("Enter your text here", "Today I feel so lucky and happy!")
+# Title and description of the app
+st.title("Sentiment Analysis App")
+st.write("This app uses the NLTK library to analyze sentiment of the text you enter.")
 
-# POS Tagging
-if st.button('Analyze Text'):
-    token = nltk.word_tokenize(user_input)
-    tagged = nltk.pos_tag(token)
-    st.write("Part-of-Speech Tagging:")
-    st.write(tagged)
+# User input for text analysis
+user_input = st.text_area("Enter text here:", "Type your text...")
 
-    # Here you can add more NLP analysis features like sentiment analysis
-
-# Run this app with: streamlit run your_script_name.py
+# When the 'Analyze' button is clicked, analyze the sentiment of the input text
+if st.button('Analyze Sentiment'):
+    if user_input:
+        # Perform sentiment analysis
+        sentiment_scores = sia.polarity_scores(user_input)
+        # Display results
+        st.subheader("Sentiment Analysis Results:")
+        st.write(sentiment_scores)
+    else:
+        st.error("Error!")
